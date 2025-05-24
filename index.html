@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Version Builder Docs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-800 font-sans">
+    <header class="bg-blue-600 text-white shadow p-4">
+      <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Version Builder</h1>
+        <nav class="space-x-4">
+          <a href="#intro" class="hover:underline">Intro</a>
+          <a href="#usage" class="hover:underline">Usage</a>
+          <a href="#faq" class="hover:underline">FAQ</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-6 space-y-12">
+      <section id="intro">
+        <h2 class="text-3xl font-semibold text-blue-700 mb-2">What is Version Builder?</h2>
+        <p>
+          Version Builder is a Jira plugin that creates a Jira release and automatically links
+          relevant issues based on Git commit messages. It helps streamline your release process.
+        </p>
+      </section>
+
+      <section id="usage">
+        <h2 class="text-3xl font-semibold text-blue-700 mb-2">How to Use</h2>
+        <ol class="list-decimal pl-6 space-y-2">
+          <li>Install the Version Builder plugin from the Atlassian Marketplace.</li>
+          <li>Connect your GitHub organization and configure the repository filters.</li>
+          <li>
+            When you create a new release in Jira, Version Builder scans commit messages between
+            selected tags or commits.
+          </li>
+          <li>
+            It extracts Jira issue keys from commit messages and automatically associates them with
+            the release.
+          </li>
+        </ol>
+      </section>
+
+      <section id="faq">
+        <h2 class="text-3xl font-semibold text-blue-700 mb-2">FAQ</h2>
+        <div class="space-y-4">
+          <details class="bg-white p-4 rounded shadow">
+            <summary class="font-medium cursor-pointer">What commit format does it support?</summary>
+            <p class="mt-2 text-gray-700">
+              Commit messages should include valid Jira ticket keys (e.g., `ABC-123`) anywhere in
+              the message.
+            </p>
+          </details>
+          <details class="bg-white p-4 rounded shadow">
+            <summary class="font-medium cursor-pointer">Can I filter which repositories to scan?</summary>
+            <p class="mt-2 text-gray-700">
+              Yes, you can configure repository inclusion/exclusion in the app settings.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-gray-200 text-center text-sm p-4">
+      &copy; 2025 Version Builder. All rights reserved.
+    </footer>
+  </body>
+</html>
