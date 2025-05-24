@@ -1,70 +1,69 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Version Builder Docs</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-gray-50 text-gray-800 font-sans">
-    <header class="bg-blue-600 text-white shadow p-4">
-      <div class="max-w-6xl mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Version Builder</h1>
-        <nav class="space-x-4">
-          <a href="#intro" class="hover:underline">Intro</a>
-          <a href="#usage" class="hover:underline">Usage</a>
-          <a href="#faq" class="hover:underline">FAQ</a>
-        </nav>
-      </div>
-    </header>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VersionBuilder - Automate Jira Releases</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
 
-    <main class="max-w-4xl mx-auto p-6 space-y-12">
-      <section id="intro">
-        <h2 class="text-3xl font-semibold text-blue-700 mb-2">What is Version Builder?</h2>
-        <p>
-          Version Builder is a Jira plugin that creates a Jira release and automatically links
-          relevant issues based on Git commit messages. It helps streamline your release process.
+  <!-- Header -->
+  <header class="bg-white shadow p-6">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-blue-600">VersionBuilder</h1>
+      <a href="#" class="text-blue-600 hover:underline">Docs</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-blue-50 to-white py-16">
+    <div class="max-w-7xl mx-auto px-6 md:flex items-center justify-between gap-12">
+      <div class="max-w-xl">
+        <h2 class="text-4xl font-bold mb-4">Automate Jira Version/Release Creation From Git</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          VersionBuilder scans your Git commit messages and links issues to Jira versions automatically. 
+          Save time and stay in sync effortlessly.
         </p>
-      </section>
+        <button class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition">
+          Try it Free
+        </button>
+      </div>
+      <img src="https://placehold.co/500x300?text=Preview+Diagram" alt="preview" class="rounded-lg shadow mt-10 md:mt-0">
+    </div>
+  </section>
 
-      <section id="usage">
-        <h2 class="text-3xl font-semibold text-blue-700 mb-2">How to Use</h2>
-        <ol class="list-decimal pl-6 space-y-2">
-          <li>Install the Version Builder plugin from the Atlassian Marketplace.</li>
-          <li>Connect your GitHub organization and configure the repository filters.</li>
-          <li>
-            When you create a new release in Jira, Version Builder scans commit messages between
-            selected tags or commits.
-          </li>
-          <li>
-            It extracts Jira issue keys from commit messages and automatically associates them with
-            the release.
-          </li>
-        </ol>
-      </section>
+  <section class="max-w-7xl mx-auto px-6 py-16">
+    <h3 class="text-2xl font-semibold mb-6">Try a Sample Git Commit Rule</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Editor -->
+      <div class="bg-white rounded-lg shadow p-4">
+        <h4 class="font-medium mb-2">Commit Rule</h4>
+        <textarea id="editor"
+          class="w-full h-64 p-3 rounded bg-gray-900 text-green-300 font-mono resize-y"
+        >
+commit: PJT-101 Add a function to calculate weight
+commit: PJT-101 refactor the function to calculate weight
+commit: PJT-102 New UI improvement
+commit: PJT-103 refactor backend
+        </textarea>
+      </div>
 
-      <section id="faq">
-        <h2 class="text-3xl font-semibold text-blue-700 mb-2">FAQ</h2>
-        <div class="space-y-4">
-          <details class="bg-white p-4 rounded shadow">
-            <summary class="font-medium cursor-pointer">What commit format does it support?</summary>
-            <p class="mt-2 text-gray-700">
-              Commit messages should include valid Jira ticket keys (e.g., `ABC-123`) anywhere in
-              the message.
-            </p>
-          </details>
-          <details class="bg-white p-4 rounded shadow">
-            <summary class="font-medium cursor-pointer">Can I filter which repositories to scan?</summary>
-            <p class="mt-2 text-gray-700">
-              Yes, you can configure repository inclusion/exclusion in the app settings.
-            </p>
-          </details>
-        </div>
-      </section>
-    </main>
-
-    <footer class="bg-gray-200 text-center text-sm p-4">
-      &copy; 2025 Version Builder. All rights reserved.
-    </footer>
-  </body>
+      <!-- Preview -->
+      <div class="bg-white rounded-lg shadow p-4">
+        <h4 class="font-medium mb-2">Linked Jira Issues</h4>
+        <ul id="preview" class="list-disc list-inside text-gray-700">
+          <li>PJT-101 - calculate weight</li>
+          <li>PJT-102 - UI improvement</li>
+          <li>PJT-103 - Tech, refactor backend</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="text-center py-6 text-sm text-gray-500">
+    © 2025 VersionBuilder. Built for engineering teams who ship fast.
+  </footer>
+</body>
 </html>
