@@ -38,30 +38,60 @@
 
 <section class="max-w-7xl mx-auto px-6 py-16">
   <h3 class="text-2xl font-semibold mb-6">How it works</h3>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-    <!-- Editor -->
-    <div class="bg-white rounded-lg shadow p-4">
-      <h4 class="font-medium mb-2">Commit Rule</h4>
-      <textarea id="editor"
-                class="w-full h-64 p-3 rounded bg-gray-900 text-green-300 font-mono resize-y"
-      >
-commit: PJT-101 Add a function to calculate weight
-commit: PJT-101 refactor the function to calculate weight
-commit: PJT-102 New UI improvement
-commit: PJT-103 refactor backend
-        </textarea>
+  <section class="bg-gradient-to-r from-blue-50 to-white py-16">
+    <div class="mx-auto px-6 space-y-16">
+      <!-- Step 1 -->
+      <div>
+        <h4 class="text-xl font-bold mb-2">Step 1: Connect Version Builder</h4>
+        <ul class="list-disc list-inside text-gray-700 mb-6">
+          <li>Click the <a href="#" class="text-blue-600 underline">Get Started</a> link to integrate Version Builder with your Jira and GitHub accounts.</li>
+          <li>Organization owners can enable access to all repositories across all projects for seamless automation.</li>
+        </ul>
+        <div class="flex flex-row gap-6 justify-center">
+          <img src="./assets/img/get-started.jpg" alt="Connect Version Builder" class="h-80 object-contain rounded-lg shadow-lg" />
+          <!-- Add more images for this step if needed -->
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div>
+        <h4 class="text-xl font-bold mb-2">Step 2: Set Repository Filters</h4>
+        <ul class="list-disc list-inside text-gray-700 mb-6">
+          <li>Define global filters to include only relevant repositories for versioning.</li>
+          <li>Easily exclude library or utility repositories not tied to production releases.</li>
+        </ul>
+        <div class="flex flex-row gap-6 justify-center">
+          <img src="./assets/img/go-to-global-filter-settings.jpeg" alt="Configure Filters" class="h-60 object-contain rounded-lg shadow-lg" />
+          <img src="./assets/img/global-filter.jpg" alt="Configure Filters" class="h-60 object-contain rounded-lg shadow-lg" />
+          <!-- Add more images for this step if needed -->
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div>
+        <h4 class="text-xl font-bold mb-2">Step 3: Create Versions from a project</h4>
+        <ul class="list-disc list-inside text-gray-700 mb-6">
+          <li>Open any Jira board and select the Version Builder menu to start a new version.</li>
+          <li>Choose which repositories to scan for commit messages and issue links.</li>
+        </ul>
+        <div class="flex flex-row gap-6 justify-center">
+          <img src="./assets/img/create-version.jpeg" alt="Create Version" class="h-80 object-contain rounded-lg shadow-lg" />
+          <!-- Add more images for this step if needed -->
+        </div>
+      </div>
+      <!-- Step 4 -->
+      <div>
+        <h4 class="text-xl font-bold mb-2">Step 4: Review and Track Versions</h4>
+        <ul class="list-disc list-inside text-gray-700 mb-6">
+          <li>View the created or updated Jira version, including all linked issues and commits.</li>
+          <li>Easily track release progress and ensure all changes are accounted for.</li>
+        </ul>
+        <div class="flex flex-row gap-6 justify-center">
+          <img src="./assets/img/git-commits.jpeg" alt="Review Version" class="w-1/2 object-contain rounded-lg shadow-lg" />
+          <img src="./assets/img/final-release-list.jpeg" alt="Review Version" class="h-60 object-contain rounded-lg shadow-lg" />
+          <!-- Add more images for this step if needed -->
+        </div>
+      </div>
     </div>
-
-    <!-- Preview -->
-    <div class="bg-white rounded-lg shadow p-4">
-      <h4 class="font-medium mb-2">Linked Jira Issues</h4>
-      <ul id="preview" class="list-disc list-inside text-gray-700">
-        <li>PJT-101 - calculate weight</li>
-        <li>PJT-102 - UI improvement</li>
-        <li>PJT-103 - Tech, refactor backend</li>
-      </ul>
-    </div>
+  </section>
   </div>
 </section>
 <!-- Footer -->
