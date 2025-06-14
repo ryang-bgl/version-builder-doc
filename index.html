@@ -9,6 +9,21 @@
       rel="stylesheet"
   />
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script>
+    function openModal(img) {
+      const modal = document.getElementById("imageModal");
+      const modalImg = document.getElementById("modalImage");
+      modalImg.src = img.src;
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("imageModal");
+      modal.classList.remove("flex");
+      modal.classList.add("hidden");
+    }
+  </script>
 </head>
 <body class="bg-white text-gray-900 font-sans">
 <header class="py-6 border-b">
@@ -65,7 +80,7 @@
         </div>
         <div>
           <div class="flex flex-row gap-6 justify-center">
-            <img src="./assets/img/get-started.jpg" alt="Connect Version Builder" class="h-80 object-contain rounded-lg shadow-lg">
+            <img src="./assets/img/get-started.jpg" onclick="openModal(this)" alt="Connect Version Builder" class="h-80 object-contain rounded-lg shadow-lg">
           </div>
         </div>
         <div class="flex items-start gap-4">
@@ -81,8 +96,8 @@
           </div>
         </div>
         <div class="flex flex-row gap-6 justify-center">
-          <img src="./assets/img/go-to-global-filter-settings.jpeg" alt="Configure Filters" class="h-60 object-contain rounded-lg shadow-lg">
-          <img src="./assets/img/global-filter.jpg" alt="Configure Filters" class="h-60 object-contain rounded-lg shadow-lg">
+          <img src="./assets/img/go-to-global-filter-settings.jpeg" onclick="openModal(this)" alt="Configure Filters" class="h-60 object-contain rounded-lg shadow-lg">
+          <img src="./assets/img/global-filter.jpg" onclick="openModal(this)" alt="Configure Filters" class="h-60 object-contain rounded-lg shadow-lg">
           <!-- Add more images for this step if needed -->
         </div>
         <div class="flex items-start gap-4">
@@ -101,7 +116,7 @@
           </div>
         </div>
         <div class="flex flex-row gap-6 justify-center">
-          <img src="./assets/img/create-version.jpeg" alt="Create Version" class="h-80 object-contain rounded-lg shadow-lg">
+          <img src="./assets/img/create-version.jpeg" onclick="openModal(this)" alt="Create Version" class="h-80 object-contain rounded-lg shadow-lg">
           <!-- Add more images for this step if needed -->
         </div>
         <div class="flex items-start gap-4">
@@ -123,13 +138,18 @@
           </div>
         </div>
         <div class="flex flex-row gap-6 justify-center">
-          <img src="./assets/img/git-commits.jpeg" alt="Review Version" class="w-1/2 object-contain rounded-lg shadow-lg">
-          <img src="./assets/img/final-release-list.jpeg" alt="Review Version" class="h-60 object-contain rounded-lg shadow-lg">
+          <img src="./assets/img/git-commits.jpeg" alt="Review Version" class="w-1/2 object-contain rounded-lg shadow-lg" onclick="openModal(this)">
+          <img src="./assets/img/final-release-list.jpeg" alt="Review Version" class="h-60 object-contain rounded-lg shadow-lg" onclick="openModal(this)">
           <!-- Add more images for this step if needed -->
         </div>
       </div>
     </div>
   </section>
+  <!-- Modal -->
+  <div id="imageModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-80">
+    <span class="absolute top-4 right-6 text-white text-4xl cursor-pointer" onclick="closeModal()">&times;</span>
+    <img id="modalImage" class="max-w-4xl max-h-[90vh] rounded-lg shadow-xl border-4 border-white">
+  </div>
 </main>
 <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm">
   © 2025 VersionBuilder. Built for engineering teams who ship fast.
