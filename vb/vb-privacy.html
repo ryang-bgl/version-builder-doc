@@ -14,8 +14,8 @@
     <div class="flex justify-between items-center h-16">
       <!-- Logo and Brand -->
       <div class="flex items-center">
-        <a href="index.html" class="flex items-center">
-          <img src="./vb/assets/img/vb.svg" alt="VersionBuilder Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
+        <a href="../index.html" class="flex items-center">
+          <img src="assets/img/vb.svg" alt="VersionBuilder Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
           <span class="text-xl font-bold text-gray-900">
             Version <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Builder</span>
           </span>
@@ -25,10 +25,39 @@
       
       <!-- Navigation Links -->
       <nav class="flex items-center space-x-6">
-        <a href="index.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Home</a>
-        <a href="help.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Help</a>
-        <a href="support.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Support</a>
-        <a href="privacy.html" class="text-blue-600 font-medium">Privacy</a>
+        <a href="../index.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Home</a>
+        
+        <!-- Products Dropdown -->
+        <div class="relative group">
+          <button class="text-blue-600 font-medium transition-colors flex items-center">
+            Products
+            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <div class="py-2">
+              <a href="../vb/" class="flex items-center px-4 py-3 text-blue-700 bg-blue-50 font-medium">
+                <img src="assets/img/vb.svg" alt="Version Builder" class="w-6 h-6 mr-3">
+                <div>
+                  <div class="font-medium">Version Builder</div>
+                  <div class="text-sm text-blue-500">for Jira • Current</div>
+                </div>
+              </a>
+              <a href="../ista/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+                <img src="../ista/assets/img/ista.svg" alt="Issue Status Time Analyzer" class="w-6 h-6 mr-3">
+                <div>
+                  <div class="font-medium">Issue Status Time Analyzer</div>
+                  <div class="text-sm text-gray-500">Analytics Tool</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <a href="../help.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Help</a>
+        <a href="../support.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Support</a>
+        <a href="vb-privacy.html" class="text-blue-600 font-medium">Privacy</a>
       </nav>
     </div>
   </div>
@@ -127,11 +156,26 @@
     </p>
     <p class="mt-2">
       <strong>VersionBuilder Support Team</strong><br/>
-      Email: <a href="mailto:[support@mail.versionbuilder.com]"
-                class="text-blue-600 hover:underline">support@mail.versionbuilder.com</a><br/>
+      Email: <a href="mailto:[support@avolink.io]"
+                class="text-blue-600 hover:underline">support@avolink.io</a><br/>
       Website: <a href="https://versionbuilder.com" class="text-blue-600 hover:underline">https://versionbuilder.com</a>
     </p>
   </section>
 </div>
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12 mt-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm">
+      © 2025 VersionBuilder. Built for engineering teams who ship fast.
+      <span class="mx-2">|</span>
+      <a href="vb-privacy.html" class="underline hover:text-white" rel="noopener">Privacy Policy</a>
+      <span class="mx-2">|</span>
+      <a href="../eula.html" class="underline hover:text-white" rel="noopener">EULA</a>
+      <span class="mx-2">|</span>
+      <a href="mailto:support@avolink.io" class="underline hover:text-white" rel="noopener">Contact Support</a>
+    </footer>
+  </div>
+</footer>
+
 </body>
 </html>

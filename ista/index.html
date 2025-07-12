@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Issue Status Time Analyzer - Track JIRA Workflow Performance</title>
+  <meta name="description" content="Issue Status Time Analyzer for JIRA - Track time spent by issues in different statuses, identify bottlenecks, and optimize your development workflow"/>
+  <meta name="keywords" content="Jira, issue tracking, time analysis, workflow analytics, status tracking, development metrics, team performance"/>
+  <meta property="og:title" content="Issue Status Time Analyzer – Optimize JIRA Workflow Performance"/>
+  <meta property="og:description" content="Track and analyze time spent by JIRA issues in different statuses to identify bottlenecks and improve team efficiency"/>
+  <meta property="og:image" content="https://versionbuilder.com/ista/assets/img/ista.svg"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://versionbuilder.com/ista"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: 'hsl(222.2, 47.4%, 11.2%)',
+              foreground: 'hsl(210, 40%, 98%)'
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out',
+            'fade-in-up': 'fadeInUp 0.8s ease-out',
+            'pulse': 'pulse 2s cubic-bezier(0.4,0,0.6,1) infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .bg-grid-pattern {
+      background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-600 { animation-delay: 0.6s; }
+    .delay-2000 { animation-delay: 2s; }
+  </style>
+</head>
+<body class="min-h-screen bg-white">
+
+<!-- Header -->
+<header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo and Brand -->
+      <div class="flex items-center">
+        <img src="assets/img/ista.svg" alt="Issue Status Time Analyzer Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
+        <span class="text-xl font-bold text-gray-900">
+          Issue Status Time <span class="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Analyzer</span>
+        </span>
+      </div>
+      
+      <!-- Navigation Links -->
+      <nav class="flex items-center space-x-6">
+        <a href="../index.html" class="text-gray-600 hover:text-green-600 font-medium transition-colors">Home</a>
+        
+        <!-- Products Dropdown -->
+        <div class="relative group">
+          <button class="text-green-600 font-medium transition-colors flex items-center">
+            Products
+            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <div class="py-2">
+              <a href="../vb/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                <img src="../vb/assets/img/vb.svg" alt="Version Builder" class="w-6 h-6 mr-3">
+                <div>
+                  <div class="font-medium">Version Builder</div>
+                  <div class="text-sm text-gray-500">for Jira</div>
+                </div>
+              </a>
+              <a href="../ista/" class="flex items-center px-4 py-3 text-green-700 bg-green-50 font-medium">
+                <img src="assets/img/ista.svg" alt="Issue Status Time Analyzer" class="w-6 h-6 mr-3">
+                <div>
+                  <div class="font-medium">Issue Status Time Analyzer</div>
+                  <div class="text-sm text-green-500">Analytics Tool • Current</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <a href="help.html" class="text-gray-600 hover:text-green-600 font-medium transition-colors">Help</a>
+        <a href="../support.html" class="text-gray-600 hover:text-green-600 font-medium transition-colors">Support</a>
+        <a href="ista-privacy.html" class="text-gray-600 hover:text-green-600 font-medium transition-colors">Privacy</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center px-4 overflow-hidden py-20">
+  <!-- Background decoration -->
+  <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+  <div class="absolute top-20 left-10 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+  <div class="absolute bottom-20 right-10 w-72 h-72 bg-emerald-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-2000"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto text-center">
+    <div class="mb-8">
+      <div class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+        </svg>
+        Optimize Your JIRA Workflow
+      </div>
+      <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 animate-fade-in-up">
+        Issue Status Time
+        <span class="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Analyzer</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in-up delay-200">
+        Track and analyze time spent by JIRA issues in different statuses. Identify workflow bottlenecks, 
+        optimize team performance, and make data-driven process improvements.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in-up delay-400">
+      <button class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center">
+        Get Started Free
+        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </button>
+      <a href="help.html" class="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 inline-flex items-center justify-center">
+        View Documentation
+      </a>
+    </div>
+
+    <!-- Workflow visualization -->
+    <div class="p-8 bg-white/80 backdrop-blur-sm shadow-2xl border-0 max-w-4xl mx-auto rounded-lg animate-fade-in-up delay-600">
+      <div class="flex items-center justify-between text-center">
+        <div class="flex-1">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Real-time Tracking</h3>
+          <p class="text-gray-600 text-sm">Monitor status changes automatically</p>
+        </div>
+
+        <div class="flex-shrink-0 mx-4">
+          <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </div>
+
+        <div class="flex-1">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Analyze Patterns</h3>
+          <p class="text-gray-600 text-sm">Identify bottlenecks and trends</p>
+        </div>
+
+        <div class="flex-shrink-0 mx-4">
+          <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </div>
+
+        <div class="flex-1">
+          <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Optimize Performance</h3>
+          <p class="text-gray-600 text-sm">Make data-driven improvements</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 bg-gray-50" id="features">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16">
+      <span class="inline-block px-3 py-1 text-sm font-medium text-green-600 bg-green-100 rounded-full border border-green-200 mb-4">
+        Powerful Analytics
+      </span>
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">
+        Everything You Need for Workflow Analysis
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Issue Status Time Analyzer provides comprehensive insights to help you understand and optimize your team's development workflow.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 rounded-lg">
+        <div class="p-6 pb-4">
+          <div class="mb-4">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Real-time Status Tracking</h3>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            Automatically capture every status transition as it happens, providing accurate time measurements without manual intervention.
+          </p>
+        </div>
+        <div class="p-6 pt-0">
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Automatic status change detection
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Precise time calculations
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 rounded-lg">
+        <div class="p-6 pb-4">
+          <div class="mb-4">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Advanced Analytics</h3>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            Generate comprehensive reports with averages, percentiles, trends, and bottleneck identification across your workflow.
+          </p>
+        </div>
+        <div class="p-6 pt-0">
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Statistical analysis
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Trend identification
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 rounded-lg">
+        <div class="p-6 pb-4">
+          <div class="mb-4">
+            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Flexible Filtering</h3>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            Filter data by project, sprint, issue type, assignee, or custom JQL queries to get targeted insights.
+          </p>
+        </div>
+        <div class="p-6 pt-0">
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Sprint-based analysis
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Custom JQL queries
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16">
+      <span class="inline-block px-3 py-1 text-sm font-medium text-blue-600 bg-blue-100 rounded-full border border-blue-200 mb-4">
+        Proven Results
+      </span>
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">
+        Transform Your Development Process
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Join teams who have improved their workflow efficiency and reduced cycle times with data-driven insights.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+      <div class="text-center p-6 border-0 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-lg">
+        <div class="flex justify-center mb-3">
+          <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+          </svg>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 mb-1">40%</div>
+        <div class="text-sm text-gray-600">Faster Issue Resolution</div>
+      </div>
+
+      <div class="text-center p-6 border-0 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-lg">
+        <div class="flex justify-center mb-3">
+          <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 mb-1">60%</div>
+        <div class="text-sm text-gray-600">Reduced Cycle Time</div>
+      </div>
+
+      <div class="text-center p-6 border-0 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-lg">
+        <div class="flex justify-center mb-3">
+          <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 mb-1">85%</div>
+        <div class="text-sm text-gray-600">Bottleneck Identification</div>
+      </div>
+
+      <div class="text-center p-6 border-0 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-lg">
+        <div class="flex justify-center mb-3">
+          <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+          </svg>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 mb-1">95%</div>
+        <div class="text-sm text-gray-600">Team Satisfaction</div>
+      </div>
+    </div>
+
+    <!-- Benefits -->
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="relative">
+        <div class="h-full border-l-4 border-l-green-500 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-lg">
+          <div class="p-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Identify Workflow Bottlenecks
+            </h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Pinpoint exactly where issues get stuck in your workflow and understand the root causes of delays.
+            </p>
+            <div class="inline-flex items-center bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+              Reduce resolution time by 40%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="h-full border-l-4 border-l-green-500 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-lg">
+          <div class="p-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Data-Driven Process Improvement
+            </h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Make informed decisions about workflow changes based on real data rather than assumptions.
+            </p>
+            <div class="inline-flex items-center bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+              Evidence-based optimization
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="h-full border-l-4 border-l-green-500 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-lg">
+          <div class="p-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Team Performance Insights
+            </h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Understand how different teams, issue types, and priorities affect cycle times and resolution speeds.
+            </p>
+            <div class="inline-flex items-center bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+              Improve team efficiency
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="h-full border-l-4 border-l-green-500 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-lg">
+          <div class="p-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Sprint and Release Planning
+            </h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Use historical data to make more accurate estimates and set realistic expectations for future sprints.
+            </p>
+            <div class="inline-flex items-center bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+              Better predictability
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-center mb-16">
+      <span class="inline-block px-3 py-1 text-sm font-medium text-purple-600 bg-purple-100 rounded-full border border-purple-200 mb-4">
+        Simple Process
+      </span>
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">
+        How Issue Status Time Analyzer Works
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Get insights into your workflow in minutes. No complex setup required - just install and start analyzing.
+      </p>
+    </div>
+
+    <div class="relative">
+      <!-- Connection Line -->
+      <div class="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-green-500 via-blue-500 to-purple-500 hidden md:block"></div>
+
+      <!-- Steps -->
+      <div class="space-y-16">
+        <!-- Step 1 -->
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="flex-1 md:text-right">
+            <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-l-green-500">
+              <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 text-green-600 rounded-full font-bold text-lg mb-4 md:ml-auto">
+                1
+              </div>
+              <h3 class="text-2xl font-semibold text-gray-900 mb-4">Install & Configure</h3>
+              <p class="text-gray-600 leading-relaxed mb-4">
+                Install the app from Atlassian Marketplace and add it to your project navigation. 
+                Configure tracking settings for your workflow.
+              </p>
+              <ul class="text-sm text-gray-500 space-y-2">
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  One-click installation
+                </li>
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Automatic configuration
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="relative z-10 flex-shrink-0">
+            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1"></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="flex-1"></div>
+          <div class="relative z-10 flex-shrink-0">
+            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1">
+            <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-l-blue-500">
+              <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-full font-bold text-lg mb-4">
+                2
+              </div>
+              <h3 class="text-2xl font-semibold text-gray-900 mb-4">Automatic Data Collection</h3>
+              <p class="text-gray-600 leading-relaxed mb-4">
+                The app automatically tracks time spent in each status as issues move through your workflow.
+              </p>
+              <ul class="text-sm text-gray-500 space-y-2">
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Real-time status monitoring
+                </li>
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Historical data analysis
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="flex-1 md:text-right">
+            <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-l-purple-500">
+              <div class="inline-flex items-center justify-center w-12 h-12 bg-purple-100 text-purple-600 rounded-full font-bold text-lg mb-4 md:ml-auto">
+                3
+              </div>
+              <h3 class="text-2xl font-semibold text-gray-900 mb-4">Generate Insights</h3>
+              <p class="text-gray-600 leading-relaxed mb-4">
+                View detailed analytics, identify bottlenecks, and make data-driven decisions to optimize your workflow.
+              </p>
+              <ul class="text-sm text-gray-500 space-y-2">
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Comprehensive reports
+                </li>
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Actionable recommendations
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="relative z-10 flex-shrink-0">
+            <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 relative overflow-hidden">
+  <!-- Background decoration -->
+  <div class="absolute inset-0 bg-black opacity-10"></div>
+  <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-4 text-center">
+    <div class="mb-12">
+      <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+        Ready to Optimize Your Workflow?
+      </h2>
+      <p class="text-xl text-green-100 max-w-3xl mx-auto leading-relaxed">
+        Join teams who have transformed their development process with data-driven insights. 
+        Start analyzing your workflow today.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <button class="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center">
+        Install from Marketplace
+        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </button>
+      <a href="help.html" class="border-2 border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 inline-flex items-center justify-center">
+        View Documentation
+      </a>
+    </div>
+
+    <div class="mt-8 text-green-100">
+      <p class="text-sm">
+        ✓ Free trial available &nbsp;&nbsp; ✓ Easy installation &nbsp;&nbsp; ✓ No complex setup
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12">
+  <div class="max-w-6xl mx-auto px-4">
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm">
+      © 2025 Issue Status Time Analyzer. Built for engineering teams who optimize workflows.
+      <span class="mx-2">|</span>
+      <a href="../privacy.html" class="underline hover:text-white" rel="noopener">Privacy Policy</a>
+      <span class="mx-2">|</span>
+      <a href="../eula.html" class="underline hover:text-white" rel="noopener">EULA</a>
+      <span class="mx-2">|</span>
+      <a href="mailto:support@avolink.io" class="underline hover:text-white" rel="noopener">Contact Support</a>
+    </footer>
+  </div>
+</footer>
+
+<!-- Smooth scrolling script -->
+<script>
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Add scroll-triggered animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe elements for animation
+  document.querySelectorAll('.animate-fade-in-up').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>

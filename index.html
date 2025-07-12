@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JIRA Tools Suite - Issue Status Time Analyzer & Version Builder</title>
-  <meta name="description" content="Professional JIRA tools for teams - Issue Status Time Analyzer for tracking time spent in statuses and Version Builder for automated version management"/>
+  <title>AVOLINK - Jira Status Time Analyzer & Version Builder for Jira</title>
+  <meta name="description" content="Professional JIRA tools for teams - Issue Status Time Analyzer for tracking time spent in statuses and Version Builder for automated version creation from git history"/>
   <meta name="keywords" content="Jira, issue tracking, time analysis, version management, automation, dev tools"/>
   
   <script src="https://cdn.tailwindcss.com"></script>
@@ -82,9 +82,36 @@
       <!-- Navigation Links -->
       <nav class="flex items-center space-x-6">
         <a href="index.html" class="text-blue-600 font-medium">Home</a>
-        <a href="help.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Help</a>
+        
+        <!-- Products Dropdown -->
+        <div class="relative group">
+          <button class="text-gray-600 hover:text-blue-600 font-medium transition-colors flex items-center">
+            Products
+            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <div class="py-2">
+              <a href="vb/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                <img src="./vb/assets/img/vb.svg" alt="Version Builder" class="w-6 h-6 mr-3">
+                <div>
+                  <div class="font-medium">Version Builder</div>
+                  <div class="text-sm text-gray-500">for Jira</div>
+                </div>
+              </a>
+              <a href="ista/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+                <img src="./ista/assets/img/ista.svg" alt="Issue Status Time Analyzer" class="w-6 h-6 mr-3">
+                <div>
+                  <div class="font-medium">Issue Status Time Analyzer</div>
+                  <div class="text-sm text-gray-500">Analytics Tool</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        
         <a href="support.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Support</a>
-        <a href="privacy.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Privacy</a>
       </nav>
     </div>
   </div>
@@ -117,7 +144,7 @@
       
       <!-- Issue Status Time Analyzer Card -->
       <div class="product-card bg-white/90 backdrop-blur-sm shadow-xl border-0 rounded-2xl p-8 cursor-pointer group"
-           onclick="window.location.href='ista/help.html'">
+           onclick="window.location.href='ista/'">
         <div class="mb-6">
           <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
             <img src="./ista/assets/img/ista.svg" alt="Issue Status Time Analyzer Logo" class="h-20 w-20" />
@@ -301,7 +328,7 @@
       <span class="mx-2">|</span>
       <a href="/eula.html" class="underline hover:text-white" rel="noopener">EULA</a>
       <span class="mx-2">|</span>
-      <a href="mailto:support@mail.versionbuilder.com" class="underline hover:text-white" rel="noopener">Contact Support</a>
+      <a href="mailto:support@avolink.io" class="underline hover:text-white" rel="noopener">Contact Support</a>
     </footer>
   </div>
 </footer>
