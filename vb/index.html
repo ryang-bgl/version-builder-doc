@@ -1,0 +1,727 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VersionBuilder - Automate Jira Version Creation From Git</title>
+  <meta name="description" content="Version Builder for Jira - Use Git commit history to automatically create Jira versions, releases and link related issues. Works with GitHub."/>
+  <meta name="keywords" content="Jira, version, release, Git, automation, git commit message, release management, dev tools"/>
+  <meta property="og:title" content="Version Builder for Jira – Effortless Versioning & Changelog Automation for Jira Based on Git"/>
+  <meta property="og:description" content="Automatically link jira issues to release/versions in Jira based on the git commit messages"/>
+  <meta property="og:image" content="https://versionbuilder.com/assets/img/hero.svg"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://versionbuilder.com"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: 'hsl(222.2, 47.4%, 11.2%)',
+              foreground: 'hsl(210, 40%, 98%)'
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out',
+            'fade-in-up': 'fadeInUp 0.8s ease-out',
+            'pulse': 'pulse 2s cubic-bezier(0.4,0,0.6,1) infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .bg-grid-pattern {
+      background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-600 { animation-delay: 0.6s; }
+    .delay-2000 { animation-delay: 2s; }
+  </style>
+</head>
+<body class="min-h-screen bg-white">
+
+<!-- Header -->
+<header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo and Brand -->
+      <div class="flex items-center">
+        <img src="../assets/img/vb.svg" alt="VersionBuilder Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
+        <span class="text-xl font-bold text-gray-900">
+          Version <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Builder</span>
+        </span>
+        <span class="ml-3 italic font-serif text-blue-700 text-sm align-middle">for Jira</span>
+      </div>
+      
+      <!-- Navigation Links -->
+      <nav class="flex items-center space-x-6">
+        <a href="../index.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Home</a>
+        <a href="index.html" class="text-blue-600 font-medium">Version Builder</a>
+        <a href="../help.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Help</a>
+        <a href="../support.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Support</a>
+        <a href="../privacy.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Privacy</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4 overflow-hidden">
+  <!-- Background decoration -->
+  <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+  <div class="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+  <div class="absolute bottom-20 right-10 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-2000"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto text-center">
+    <div class="mb-8">
+      <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+        Automate Your JIRA Workflow
+      </div>
+      <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in-up delay-200">
+        Automatically scan your Git commit messages, extract JIRA issues, and seamlessly link them to Jira versions.
+        Say goodbye to manual version management.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in-up delay-400">
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center">
+        Get Started Free
+        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </button>
+<!--      <button class="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300">-->
+<!--        Watch Demo-->
+<!--      </button>-->
+    </div>
+
+    <!-- Workflow visualization -->
+    <div class="p-8 bg-white/80 backdrop-blur-sm shadow-2xl border-0 max-w-4xl mx-auto rounded-lg animate-fade-in-up delay-600">
+      <div class="flex items-center justify-between text-center">
+        <div class="flex-1">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Git Commits</h3>
+          <p class="text-gray-600 text-sm">Scan commit messages automatically</p>
+        </div>
+
+        <div class="flex-shrink-0 mx-4">
+          <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </div>
+
+        <div class="flex-1">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Extract Issues</h3>
+          <p class="text-gray-600 text-sm">Identify JIRA issue references</p>
+        </div>
+
+        <div class="flex-shrink-0 mx-4">
+          <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </div>
+
+        <div class="flex-1">
+          <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Link to Versions</h3>
+          <p class="text-gray-600 text-sm">Automatically associate with releases</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 bg-gray-50" id="features">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16">
+                <span class="inline-block px-3 py-1 text-sm font-medium text-blue-600 bg-blue-100 rounded-full border border-blue-200 mb-4">
+                    Powerful Features
+                </span>
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">
+        Everything You Need for Version Management
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        VersionBuilder provides comprehensive automation tools to streamline your JIRA version management workflow.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 rounded-lg">
+        <div class="p-6 pb-4">
+          <div class="mb-4">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Smart Commit Scanning</h3>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            Based on configuration, Version Builder automatically scans all Git commit messages.
+          </p>
+        </div>
+        <div class="p-6 pt-0">
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Smart scanning based on configuration
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Easy configuration
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 rounded-lg">
+        <div class="p-6 pb-4">
+          <div class="mb-4">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Precise Issue Extraction</h3>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            Accurately extracts JIRA issue keys from commit messages.
+          </p>
+        </div>
+        <div class="p-6 pt-0">
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              No configuration needed
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Duplicate detection
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 rounded-lg">
+        <div class="p-6 pb-4">
+          <div class="mb-4">
+            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Automated Version Linking</h3>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            Seamlessly links extracted issues to the JIRA version.
+          </p>
+        </div>
+        <div class="p-6 pt-0">
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Bulk operations
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Smart filtering
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16">
+                <span class="inline-block px-3 py-1 text-sm font-medium text-green-600 bg-green-100 rounded-full border border-green-200 mb-4">
+                    Proven Results
+                </span>
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">
+        Transform Your Development Workflow
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Join thousands of development teams who have revolutionized their version management with VersionBuilder.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+      <div class="text-center p-6 border-0 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-lg">
+        <div class="flex justify-center mb-3">
+          <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 mb-1">75%</div>
+        <div class="text-sm text-gray-600">Time Saved</div>
+      </div>
+
+      <div class="text-center p-6 border-0 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-lg">
+        <div class="flex justify-center mb-3">
+          <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 mb-1">95%</div>
+        <div class="text-sm text-gray-600">Accuracy Improvement</div>
+      </div>
+
+      <div class="text-center p-6 border-0 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-lg">
+        <div class="flex justify-center mb-3">
+          <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+          </svg>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 mb-1">3x</div>
+        <div class="text-sm text-gray-600">Productivity Boost</div>
+      </div>
+
+      <div class="text-center p-6 border-0 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-lg">
+        <div class="flex justify-center mb-3">
+          <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+          </svg>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 mb-1">98%</div>
+        <div class="text-sm text-gray-600">Team Adoption</div>
+      </div>
+    </div>
+
+    <!-- Benefits -->
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="relative">
+        <div class="h-full border-l-4 border-l-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-lg">
+          <div class="p-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Eliminate Manual Work
+            </h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              No more manually searching through commits and linking issues to versions. Let VersionBuilder handle it automatically.
+            </p>
+            <div class="inline-flex items-center bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+              Save 15+ hours per release cycle
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="h-full border-l-4 border-l-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-lg">
+          <div class="p-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Improve Release Accuracy
+            </h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Ensure every relevant issue is properly linked to its version, reducing confusion and improving traceability.
+            </p>
+            <div class="inline-flex items-center bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+              99.9% accurate issue tracking
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="h-full border-l-4 border-l-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-lg">
+          <div class="p-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Accelerate Release Cycles
+            </h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Streamline your release process by automating version management tasks that typically slow down deployments.
+            </p>
+            <div class="inline-flex items-center bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+              Deploy 3x faster
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="h-full border-l-4 border-l-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-lg">
+          <div class="p-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Enhance Team Collaboration
+            </h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Provide clear visibility into what issues are included in each version, improving communication across teams.
+            </p>
+            <div class="inline-flex items-center bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+              Better stakeholder alignment
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-center mb-16">
+                <span class="inline-block px-3 py-1 text-sm font-medium text-purple-600 bg-purple-100 rounded-full border border-purple-200 mb-4">
+                    Simple Process
+                </span>
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">
+        How VersionBuilder Works
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Get started in minutes with our simple three-step process. No complex configuration required.
+      </p>
+    </div>
+
+    <div class="relative">
+      <!-- Connection Line -->
+      <div class="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-500 via-purple-500 to-green-500 hidden md:block"></div>
+
+      <!-- Steps -->
+      <div class="space-y-16">
+        <!-- Step 1 -->
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="flex-1 md:text-right">
+            <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-l-blue-500">
+              <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-full font-bold text-lg mb-4 md:ml-auto">
+                1
+              </div>
+              <h3 class="text-2xl font-semibold text-gray-900 mb-4">Connect Your Repository</h3>
+              <p class="text-gray-600 leading-relaxed mb-4">
+                Link your Git repository and JIRA instance with our secure OAuth integration.
+                Configure your repository filter settings in just a few clicks.
+              </p>
+              <ul class="text-sm text-gray-500 space-y-2">
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Secure OAuth authentication
+                </li>
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Support for GitHub
+                </li>
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  User friendly repository filter configuration
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="relative z-10 flex-shrink-0">
+            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1"></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="flex-1"></div>
+          <div class="relative z-10 flex-shrink-0">
+            <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1">
+            <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-l-purple-500">
+              <div class="inline-flex items-center justify-center w-12 h-12 bg-purple-100 text-purple-600 rounded-full font-bold text-lg mb-4">
+                2
+              </div>
+              <h3 class="text-2xl font-semibold text-gray-900 mb-4">Create/Update a version in a project</h3>
+              <p class="text-gray-600 leading-relaxed mb-4">
+                VersionBuilder scans your selected repositories and automatically analyzes all Jira issues to be shipped.              </p>
+              <ul class="text-sm text-gray-500 space-y-2">
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  SmartCommit pattern recognition
+                </li>
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Historical commit analysis
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="flex-1 md:text-right">
+            <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-l-green-500">
+              <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 text-green-600 rounded-full font-bold text-lg mb-4 md:ml-auto">
+                3
+              </div>
+              <h3 class="text-2xl font-semibold text-gray-900 mb-4">Smart Version Linking</h3>
+              <p class="text-gray-600 leading-relaxed mb-4">
+                Version Builder automatically
+                links extracted issues to the appropriate JIRA versions, keeping your project organized.
+              </p>
+              <ul class="text-sm text-gray-500 space-y-2">
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Automated version mapping
+                </li>
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Bulk issue processing
+                </li>
+                <li class="flex items-center">
+                  <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Conflict resolution
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="relative z-10 flex-shrink-0">
+            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 relative overflow-hidden">
+  <!-- Background decoration -->
+  <div class="absolute inset-0 bg-black opacity-10"></div>
+  <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-4 text-center">
+    <div class="mb-12">
+      <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+        Ready to Automate Your Workflow?
+      </h2>
+      <p class="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+<!--        Join thousands of development teams who have transformed their version management.-->
+        Start your free trial today and experience the difference.
+      </p>
+    </div>
+
+<!--    <div class="grid md:grid-cols-3 gap-6 mb-12">-->
+<!--      <div class="bg-white/10 backdrop-blur-sm border border-white/20 text-white p-6 text-center rounded-lg">-->
+<!--        <svg class="w-8 h-8 mx-auto mb-3 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>-->
+<!--        </svg>-->
+<!--        <div class="text-2xl font-bold mb-1">10,000+</div>-->
+<!--        <div class="text-blue-200">Active Users</div>-->
+<!--      </div>-->
+
+<!--      <div class="bg-white/10 backdrop-blur-sm border border-white/20 text-white p-6 text-center rounded-lg">-->
+<!--        <svg class="w-8 h-8 mx-auto mb-3 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>-->
+<!--        </svg>-->
+<!--        <div class="text-2xl font-bold mb-1">4.9/5</div>-->
+<!--        <div class="text-blue-200">User Rating</div>-->
+<!--      </div>-->
+
+<!--      <div class="bg-white/10 backdrop-blur-sm border border-white/20 text-white p-6 text-center rounded-lg">-->
+<!--        <svg class="w-8 h-8 mx-auto mb-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>-->
+<!--        </svg>-->
+<!--        <div class="text-2xl font-bold mb-1">50M+</div>-->
+<!--        <div class="text-blue-200">Issues Processed</div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <button class="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center">
+        Start Free Trial
+        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </button>
+<!--      <button class="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300">-->
+<!--        Schedule Demo-->
+<!--      </button>-->
+    </div>
+
+    <div class="mt-8 text-blue-100">
+      <p class="text-sm">
+        ✓ 30-day free trial &nbsp;&nbsp; ✓ Cancel anytime
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12">
+  <div class="max-w-6xl mx-auto px-4">
+<!--    <div class="grid md:grid-cols-4 gap-8 mb-8">-->
+<!--      <div>-->
+<!--        <h3 class="text-xl font-bold mb-4">VersionBuilder</h3>-->
+<!--        <p class="text-gray-400 leading-relaxed">-->
+<!--          Automate your JIRA workflow with intelligent Git commit scanning and version linking.-->
+<!--        </p>-->
+<!--      </div>-->
+
+<!--      <div>-->
+<!--        <h4 class="font-semibold mb-4">Product</h4>-->
+<!--        <ul class="space-y-2 text-gray-400">-->
+<!--          <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">API</a></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+
+<!--      <div>-->
+<!--        <h4 class="font-semibold mb-4">Company</h4>-->
+<!--        <ul class="space-y-2 text-gray-400">-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">About</a></li>-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+
+<!--      <div>-->
+<!--        <h4 class="font-semibold mb-4">Support</h4>-->
+<!--        <ul class="space-y-2 text-gray-400">-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">Community</a></li>-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">Status</a></li>-->
+<!--          <li><a href="#" class="hover:text-white transition-colors">Security</a></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </div>-->
+
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm">
+      © 2025 VersionBuilder. Built for engineering teams who ship fast.
+      <span class="mx-2">|</span>
+      <a href="../privacy.html" class="underline hover:text-white" rel="noopener">Privacy Policy</a>
+      <span class="mx-2">|</span>
+      <a href="../eula.html" class="underline hover:text-white" rel="noopener">EULA</a>
+      <span class="mx-2">|</span>
+      <a href="mailto:support@mail.versionbuilder.com" class="underline hover:text-white" rel="noopener">Contact Support</a>
+    </footer>
+  </div>
+</footer>
+
+<!-- Smooth scrolling script -->
+<script>
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Add scroll-triggered animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe elements for animation
+  document.querySelectorAll('.animate-fade-in-up').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
