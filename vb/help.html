@@ -76,7 +76,7 @@
           </svg>
         </button>
         <a href="index.html" class="flex items-center">
-          <img src="./vb/assets/img/vb.svg" alt="VersionBuilder Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
+          <img src="./assets/img/vb.svg" alt="VersionBuilder Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
           <span class="text-xl font-bold text-gray-900">
             Version <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Builder</span>
           </span>
@@ -86,58 +86,11 @@
       
       <!-- Navigation Links -->
       <nav class="flex items-center space-x-6">
-        <a href="index.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Home</a>
-        
-        <!-- Products Dropdown -->
-        <div class="relative group">
-          <button class="text-gray-600 hover:text-blue-600 font-medium transition-colors flex items-center">
-            Products
-            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          <div class="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-            <div class="py-2">
-              <a href="vb/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                <img src="./vb/assets/img/vb.svg" alt="Version Builder" class="w-6 h-6 mr-3">
-                <div>
-                  <div class="font-medium">Version Builder</div>
-                  <div class="text-sm text-gray-500">for Jira</div>
-                </div>
-              </a>
-              <a href="ista/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
-                <img src="./ista/assets/img/ista.svg" alt="Issue Status Time Analyzer" class="w-6 h-6 mr-3">
-                <div>
-                  <div class="font-medium">Issue Status Time Analyzer</div>
-                  <div class="text-sm text-gray-500">Analytics Tool</div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-        
-        <a href="help.html" class="text-blue-600 font-medium">Help</a>
-        <a href="support.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Support</a>
-        
-        <!-- Privacy Dropdown -->
-        <div class="relative group">
-          <button class="text-gray-600 hover:text-blue-600 font-medium transition-colors flex items-center">
-            Privacy
-            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          <div class="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-            <div class="py-2">
-              <a href="vb/vb-privacy.html" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors text-sm">
-                Version Builder Privacy
-              </a>
-              <a href="ista/ista-privacy.html" class="flex items-center px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors text-sm">
-                ISTA Privacy
-              </a>
-            </div>
-          </div>
-        </div>
+        <a href="../index.html" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Home</a>
+        <a href="./help.html" class="text-blue-600 font-medium">Help</a>
+        <a href="./vb-privacy.html" class="text-blue-600 font-medium">
+          Privacy
+        </a>
       </nav>
     </div>
   </div>
@@ -169,10 +122,17 @@
 
   <!-- Getting Started Section -->
   <section id="getting-started" class="mb-16">
-    <div class="mb-8">
+    <div class="mb-4">
       <h2 class="text-3xl font-bold text-gray-900 mb-4">Getting Started</h2>
       <p class="text-lg text-gray-600">Version Builder is a Jira app that helps you automatically create release versions based on Git commit messages and issue tracking.</p>
     </div>
+    <a class="mb-4 bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center"
+    href="https://marketplace.atlassian.com/apps/1238191/version-builder-for-jira" target="_blank" rel="noopener noreferrer">
+    Get Started Free
+      <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+      </svg>
+    </a>
 
     <!-- Installation -->
     <div id="installation" class="mb-12">
@@ -500,13 +460,13 @@
 <footer class="bg-gray-900 text-white py-8">
   <div class="max-w-6xl mx-auto px-4 text-center">
     <div class="flex items-center justify-center mb-4">
-      <img src="./vb/assets/img/vb.svg" alt="VersionBuilder Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
+      <img src="./assets/img/vb.svg" alt="VersionBuilder Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
       <span class="text-xl font-bold">Version<span class="text-blue-400">Builder</span></span>
     </div>
     <p class="text-gray-400 text-sm">
       © 2025 VersionBuilder. Built for engineering teams who ship fast.
       <span class="mx-2">|</span>
-      <a href="/privacy.html" class="underline hover:text-white" rel="noopener">Privacy Policy</a>
+      <a href="./vb-privacy.html" class="underline hover:text-white" rel="noopener">Privacy Policy</a>
       <span class="mx-2">|</span>
       <a href="/eula.html" class="underline hover:text-white" rel="noopener">EULA</a>
       <span class="mx-2">|</span>

@@ -88,48 +88,18 @@
     <div class="flex justify-between items-center h-16">
       <!-- Logo and Brand -->
       <div class="flex items-center">
-        <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3">
-          <img src="assets/img/ista.svg" alt="Issue Status Time Analyzer Logo" class="h-8 w-8" />
-        </div>
-        <span class="text-xl font-bold text-gray-900">
-          Issue Status Time <span class="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Analyzer</span>
-        </span>
+        <a href="../index.html" class="flex items-center">
+          <img src="assets/img/ista.svg" alt="Issue Status Time Analyzer Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
+          <span class="text-xl font-bold text-gray-900">
+            Issue Status Time <span class="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Analyzer</span>
+          </span>
+          </a>
       </div>
       
       <!-- Navigation Links -->
       <nav class="flex items-center space-x-6">
         <a href="../index.html" class="text-gray-600 hover:text-green-600 font-medium transition-colors">Home</a>
-        
-        <!-- Products Dropdown -->
-        <div class="relative group">
-          <button class="text-green-600 font-medium transition-colors flex items-center">
-            Products
-            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          <div class="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-            <div class="py-2">
-              <a href="../vb/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                <img src="../vb/assets/img/vb.svg" alt="Version Builder" class="w-6 h-6 mr-3">
-                <div>
-                  <div class="font-medium">Version Builder</div>
-                  <div class="text-sm text-gray-500">for Jira</div>
-                </div>
-              </a>
-              <a href="../ista/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
-                <img src="assets/img/ista.svg" alt="Issue Status Time Analyzer" class="w-6 h-6 mr-3">
-                <div>
-                  <div class="font-medium">Issue Status Time Analyzer</div>
-                  <div class="text-sm text-gray-500">Analytics Tool</div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-        
         <a href="help.html" class="text-green-600 font-medium">Help</a>
-        <a href="../support.html" class="text-gray-600 hover:text-green-600 font-medium transition-colors">Support</a>
         <a href="ista-privacy.html" class="text-gray-600 hover:text-green-600 font-medium transition-colors">Privacy</a>
       </nav>
     </div>
@@ -683,10 +653,15 @@ Content-Type: application/json
 <!-- Footer -->
 <footer class="bg-gray-900 text-white py-12">
   <div class="max-w-6xl mx-auto px-4">
+    <div class="flex items-center justify-center mb-4">
+      <img src="./assets/img/ista.svg" alt="VersionBuilder Logo" class="h-8 w-8 rounded-lg shadow mr-3" />
+      <span class="text-xl font-bold">Issue Status Time Analyzer</span>
+    </div>
+
     <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm">
       © 2025 Issue Status Time Analyzer. Built for engineering teams who optimize workflows.
       <span class="mx-2">|</span>
-      <a href="../privacy.html" class="underline hover:text-white" rel="noopener">Privacy Policy</a>
+      <a href="./ista-privacy.html" class="underline hover:text-white" rel="noopener">Privacy Policy</a>
       <span class="mx-2">|</span>
       <a href="../eula.html" class="underline hover:text-white" rel="noopener">EULA</a>
       <span class="mx-2">|</span>
